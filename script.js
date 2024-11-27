@@ -10,28 +10,47 @@ document.addEventListener("DOMContentLoaded", () => {
     let isDragging = false;
 
     // Prevent image dragging
-    images.forEach(img => {
+    images.forEach((img) => {
         img.addEventListener("dragstart", (e) => {
-            e.preventDefault();
+            e.preventDefault(); // 기본 드래그 동작 방지
         });
     });
 
-    // Slider Functionality
+    // Desktop: Mouse events
     slider.addEventListener("mousedown", () => {
         isDragging = true;
-        document.body.style.cursor = "grabbing"; // 손 모양으로 변경
+        document.body.style.cursor = "grabbing";
     });
 
     document.addEventListener("mouseup", () => {
         isDragging = false;
-        document.body.style.cursor = "default"; // 기본 커서로 복원
+        document.body.style.cursor = "default";
     });
 
     document.addEventListener("mousemove", (e) => {
         if (!isDragging) return;
+        updateSliderPosition(e.clientX);
+    });
 
+    // Mobile: Touch events
+    slider.addEventListener("touchstart", () => {
+        isDragging = true;
+    });
+
+    document.addEventListener("touchend", () => {
+        isDragging = false;
+    });
+
+    document.addEventListener("touchmove", (e) => {
+        if (!isDragging) return;
+        const touch = e.touches[0];
+        updateSliderPosition(touch.clientX);
+    });
+
+    // Update slider position and clip-path
+    function updateSliderPosition(x) {
         const rect = comparison.getBoundingClientRect();
-        let offsetX = e.clientX - rect.left;
+        let offsetX = x - rect.left;
 
         // Ensure the slider stays within bounds
         offsetX = Math.max(0, Math.min(offsetX, rect.width));
@@ -41,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Adjust the after image clip-path
         after.style.clipPath = `inset(0 ${100 - (offsetX / rect.width) * 100}% 0 0)`;
-    });
+    }
 
     // Highlight active tab
     function updateTabs() {
@@ -50,9 +69,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Scroll to page
+    // Scroll to page (no animation)
     function scrollToPage(index) {
         const offset = index * window.innerHeight;
+        scrollContainer.style.transition = "none"; // Remove animation
         scrollContainer.style.transform = `translateY(-${offset}px)`;
         updateTabs();
     }
