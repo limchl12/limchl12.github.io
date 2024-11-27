@@ -1,1 +1,40 @@
-hello world!
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Navigation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Panel -->
+    <div class="nav-panel">
+        <div class="tab" data-page="0">Page 1</div>
+        <div class="tab" data-page="1">Page 2</div>
+    </div>
+
+    <!-- Pages -->
+    <div class="page" id="page-1">
+        <div class="container">
+            <div class="comparison">
+                <div class="before">
+                    <img src="before.png" alt="Before Processing">
+                </div>
+                <div class="after">
+                    <img src="after.png" alt="After Processing">
+                </div>
+                <div class="slider"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page" id="page-2">
+        <div class="content">
+            <h1>Welcome to Page 2</h1>
+            <p>Additional information or content goes here.</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
