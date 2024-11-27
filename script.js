@@ -5,18 +5,26 @@ document.addEventListener("DOMContentLoaded", () => {
     const comparison = document.querySelector(".comparison");
     const slider = document.querySelector(".slider");
     const after = document.querySelector(".after");
+    const images = document.querySelectorAll("img");
     let currentPage = 0;
     let isDragging = false;
+
+    // Prevent image dragging
+    images.forEach(img => {
+        img.addEventListener("dragstart", (e) => {
+            e.preventDefault();
+        });
+    });
 
     // Slider Functionality
     slider.addEventListener("mousedown", () => {
         isDragging = true;
-        document.body.style.cursor = "ew-resize";
+        document.body.style.cursor = "grabbing"; // 손 모양으로 변경
     });
 
     document.addEventListener("mouseup", () => {
         isDragging = false;
-        document.body.style.cursor = "default";
+        document.body.style.cursor = "default"; // 기본 커서로 복원
     });
 
     document.addEventListener("mousemove", (e) => {
