@@ -1,9 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const scrollContainer = document.querySelector(".scroll-container");
+    const tabs = document.querySelectorAll(".tab");
+    const pages = document.querySelectorAll(".page");
     const comparison = document.querySelector(".comparison");
     const slider = document.querySelector(".slider");
     const after = document.querySelector(".after");
-    const tabs = document.querySelectorAll(".tab");
-    const pages = document.querySelectorAll(".page");
     let currentPage = 0;
     let isDragging = false;
 
@@ -34,31 +35,37 @@ document.addEventListener("DOMContentLoaded", () => {
         after.style.clipPath = `inset(0 ${100 - (offsetX / rect.width) * 100}% 0 0)`;
     });
 
-    // Navigation Tabs
+    // Highlight active tab
+    function updateTabs() {
+        tabs.forEach((tab, index) => {
+            tab.classList.toggle("active", index === currentPage);
+        });
+    }
+
+    // Scroll to page
+    function scrollToPage(index) {
+        const offset = index * window.innerHeight;
+        scrollContainer.style.transform = `translateY(-${offset}px)`;
+        updateTabs();
+    }
+
+    // Event: Tab click
     tabs.forEach((tab, index) => {
         tab.addEventListener("click", () => {
             currentPage = index;
-            scrollToPage(index);
+            scrollToPage(currentPage);
         });
     });
 
+    // Event: Mouse wheel
     document.addEventListener("wheel", (e) => {
         if (e.deltaY > 0) {
             currentPage = Math.min(currentPage + 1, pages.length - 1);
-        } else {
+        } else if (e.deltaY < 0) {
             currentPage = Math.max(currentPage - 1, 0);
         }
         scrollToPage(currentPage);
     });
-
-    function scrollToPage(index) {
-        const offset = index * window.innerHeight;
-        document.body.style.transform = `translateY(-${offset}px)`;
-
-        tabs.forEach((tab, i) => {
-            tab.classList.toggle("active", i === index);
-        });
-    }
 
     // Initialize
     scrollToPage(0);

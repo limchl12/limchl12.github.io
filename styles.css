@@ -4,10 +4,6 @@ body, html {
     padding: 0;
     overflow: hidden;
     height: 100%;
-}
-
-body {
-    transition: transform 0.8s ease;
     font-family: Arial, sans-serif;
 }
 
@@ -22,7 +18,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 100;
+    z-index: 9999;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
@@ -44,6 +40,13 @@ body {
     background-color: #636e72;
 }
 
+/* Scrollable Content Container */
+.scroll-container {
+    transform: translateY(0); /* Scroll 애니메이션 처리 */
+    transition: transform 0.8s ease;
+    height: 100%; /* 화면 전체를 차지 */
+}
+
 /* Pages */
 .page {
     width: 100%;
@@ -52,7 +55,7 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    padding-top: 50px; /* Offset for navigation panel */
+    padding-top: 50px; /* Navigation bar offset */
 }
 
 #page-1 {
@@ -99,6 +102,7 @@ body {
 .after {
     z-index: 2;
     clip-path: inset(0 50% 0 0);
+    transition: clip-path 0.2s ease-out;
 }
 
 .slider {
