@@ -1,76 +1,45 @@
+// Select elements
+const comparison = document.querySelector(".comparison");
+const slider = document.querySelector(".slider");
+const after = document.querySelector(".after");
+
+let isDragging = false;
+
+// Event: Start dragging
+slider.addEventListener("mousedown", () => {
+    isDragging = true;
+    document.body.style.cursor = "ew-resize";
+});
+
+// Event: Stop dragging
+document.addEventListener("mouseup", () => {
+    isDragging = false;
+    document.body.style.cursor = "default";
+});
+
+// Event: Drag slider
+document.addEventListener("mousemove", (e) => {
+    if (!isDragging) return;
+
+    // Get the bounding rectangle of the comparison container
+    const rect = comparison.getBoundingClientRect();
+    let offsetX = e.clientX - rect.left;
+
+    // Ensure the slider stays within the bounds
+    offsetX = Math.max(0, Math.min(offsetX, rect.width));
+
+    // Update slider position
+    slider.style.left = `${offsetX}px`;
+
+    // Adjust the after image clip-path
+    const percentage = (offsetX / rect.width) * 100;
+    after.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
+});
+
+// Initialize slider position on page load
 document.addEventListener("DOMContentLoaded", () => {
-    // Comparison Slider Functionality
-    const comparison = document.querySelector(".comparison");
-    const slider = document.querySelector(".slider");
-    const after = document.querySelector(".after");
-
-    let isDragging = false;
-
-    slider.addEventListener("mousedown", () => {
-        isDragging = true;
-        document.body.style.cursor = "ew-resize";
-    });
-
-    document.addEventListener("mouseup", () => {
-        isDragging = false;
-        document.body.style.cursor = "default";
-    });
-
-    document.addEventListener("mousemove", (e) => {
-        if (!isDragging) return;
-
-        const rect = comparison.getBoundingClientRect();
-        let offsetX = e.clientX - rect.left;
-
-        // Ensure slider stays within bounds
-        offsetX = Math.max(0, Math.min(offsetX, rect.width));
-
-        // Adjust slider position and clip-path
-        slider.style.left = `${offsetX}px`;
-        after.style.clipPath = `inset(0 ${rect.width - offsetX}px 0 0)`;
-    });
-
-    // Full Page Scroll with Navigation Update
-    let currentPage = 0;
-    const pages = document.querySelectorAll(".page");
-    const totalPages = pages.length;
-    const tabs = document.querySelectorAll(".tab");
-
-    // Highlight Active Tab
-    function updateTabs() {
-        tabs.forEach((tab, index) => {
-            tab.classList.toggle("active", index === currentPage);
-        });
-    }
-
-    // Scroll Event
-    document.addEventListener("wheel", (e) => {
-        if (e.deltaY > 0) {
-            // Scroll Down
-            currentPage = Math.min(currentPage + 1, totalPages - 1);
-        } else if (e.deltaY < 0) {
-            // Scroll Up
-            currentPage = Math.max(currentPage - 1, 0);
-        }
-
-        scrollToPage(currentPage);
-    });
-
-    // Tab Click Event
-    tabs.forEach((tab) => {
-        tab.addEventListener("click", () => {
-            currentPage = parseInt(tab.dataset.page, 10);
-            scrollToPage(currentPage);
-        });
-    });
-
-    // Scroll to Page Function
-    function scrollToPage(pageIndex) {
-        const offset = pageIndex * window.innerHeight;
-        document.body.style.transform = `translateY(-${offset}px)`;
-        updateTabs();
-    }
-
-    // Initialize Tabs
-    updateTabs();
+    const rect = comparison.getBoundingClientRect();
+    const initialX = rect.width / 2; // Start at the center
+    slider.style.left = `${initialX}px`;
+    after.style.clipPath = `inset(0 50% 0 0)`; // Start at half-and-half
 });
